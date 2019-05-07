@@ -50,100 +50,137 @@ class Product
 	 */
 	private $categories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="product", orphanRemoval=true)
+     */
+    private $orderItems;
+
 	public function __construct()
-	{
-		$this->isTop = false;
-		$this->categories = new ArrayCollection();
-	}
+               	{
+               		$this->isTop = false;
+               		$this->categories = new ArrayCollection();
+                 $this->orderItems = new ArrayCollection();
+               	}
 
 	public function getId(): ?int
-	{
-		return $this->id;
-	}
+               	{
+               		return $this->id;
+               	}
 
 	public function getName(): ?string
-	{
-		return $this->name;
-	}
+               	{
+               		return $this->name;
+               	}
 
 	public function setName(string $name): self
-	{
-		$this->name = $name;
-
-		return $this;
-	}
+               	{
+               		$this->name = $name;
+               
+               		return $this;
+               	}
 
 	public function getDescription(): ?string
-	{
-		return $this->description;
-	}
+               	{
+               		return $this->description;
+               	}
 
 	public function setDescription(?string $description): self
-	{
-		$this->description = $description;
-
-		return $this;
-	}
+               	{
+               		$this->description = $description;
+               
+               		return $this;
+               	}
 
 	public function getPrice(): ?int
-	{
-		return $this->price;
-	}
+               	{
+               		return $this->price;
+               	}
 
 	public function setPrice(int $price): self
-	{
-		$this->price = $price;
-
-		return $this;
-	}
+               	{
+               		$this->price = $price;
+               
+               		return $this;
+               	}
 
 	public function getCount(): ?int
-	{
-		return $this->count;
-	}
+               	{
+               		return $this->count;
+               	}
 
 	public function setCount(?int $count): self
-	{
-		$this->count = $count;
-
-		return $this;
-	}
+               	{
+               		$this->count = $count;
+               
+               		return $this;
+               	}
 
 	public function getIsTop(): ?bool
-	{
-		return $this->isTop;
-	}
+               	{
+               		return $this->isTop;
+               	}
 
 	public function setIsTop(bool $isTop): self
-	{
-		$this->isTop = $isTop;
-
-		return $this;
-	}
+               	{
+               		$this->isTop = $isTop;
+               
+               		return $this;
+               	}
 
 	/**
 	 * @return Collection|Category[]
 	 */
 	public function getCategories(): Collection
-	{
-		return $this->categories;
-	}
+               	{
+               		return $this->categories;
+               	}
 
 	public function addCategory(Category $category): self
-	{
-		if ( !$this->categories->contains($category) ) {
-			$this->categories[] = $category;
-		}
-
-		return $this;
-	}
+               	{
+               		if ( !$this->categories->contains($category) ) {
+               			$this->categories[] = $category;
+               		}
+               
+               		return $this;
+               	}
 
 	public function removeCategory(Category $category): self
-	{
-		if ( $this->categories->contains($category) ) {
-			$this->categories->removeElement($category);
-		}
+               	{
+               		if ( $this->categories->contains($category) ) {
+               			$this->categories->removeElement($category);
+               		}
+               
+               		return $this;
+               	}
 
-		return $this;
-	}
+    /**
+     * @return Collection|OrderItem[]
+     */
+    public function getOrderItems(): Collection
+    {
+        return $this->orderItems;
+    }
+
+    public function addOrderItem(OrderItem $orderItem): self
+    {
+        if (!$this->orderItems->contains($orderItem)) {
+            $this->orderItems[] = $orderItem;
+            $orderItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderItem(OrderItem $orderItem): self
+    {
+        if ($this->orderItems->contains($orderItem)) {
+            $this->orderItems->removeElement($orderItem);
+            // set the owning side to null (unless already changed)
+            if ($orderItem->getProduct() === $this) {
+                $orderItem->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
 }

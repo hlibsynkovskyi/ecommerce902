@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
@@ -58,123 +59,178 @@ class Order
 	 */
 	private $orderItems;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Assert\NotBlank(groups={"makeOrder"})
+     */
+    private $phone;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Assert\NotBlank(groups={"makeOrder"})
+	 * @Assert\Email(checkMX=true, checkHost=true, groups={"makeOrder"})
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=500, nullable=true)
+	 * @Assert\NotBlank(groups={"makeOrder"})
+     */
+    private $address;
+
 	public function __construct()
-	{
-		$this->createdAt = new \DateTime();
-		$this->status = self::STATUS_NEW;
-		$this->isPaid = false;
-		$this->amount = 0;
-		$this->orderItems = new ArrayCollection();
-	}
+                           	{
+                           		$this->createdAt = new \DateTime();
+                           		$this->status = self::STATUS_NEW;
+                           		$this->isPaid = false;
+                           		$this->amount = 0;
+                           		$this->orderItems = new ArrayCollection();
+                           	}
 
 	public function getId(): ?int
-	{
-		return $this->id;
-	}
+                           	{
+                           		return $this->id;
+                           	}
 
 	public function getCreatedAt(): ?\DateTimeInterface
-	{
-		return $this->createdAt;
-	}
+                           	{
+                           		return $this->createdAt;
+                           	}
 
 	public function setCreatedAt(\DateTimeInterface $createdAt): self
-	{
-		$this->createdAt = $createdAt;
+                           	{
+                           		$this->createdAt = $createdAt;
 
-		return $this;
-	}
+                           		return $this;
+                           	}
 
 	public function getStatus(): ?int
-	{
-		return $this->status;
-	}
+                           	{
+                           		return $this->status;
+                           	}
 
 	public function setStatus(int $status): self
-	{
-		$this->status = $status;
+                           	{
+                           		$this->status = $status;
 
-		return $this;
-	}
+                           		return $this;
+                           	}
 
 	public function getIsPaid(): ?bool
-	{
-		return $this->isPaid;
-	}
+                           	{
+                           		return $this->isPaid;
+                           	}
 
 	public function setIsPaid(bool $isPaid): self
-	{
-		$this->isPaid = $isPaid;
+                           	{
+                           		$this->isPaid = $isPaid;
 
-		return $this;
-	}
+                           		return $this;
+                           	}
 
 	public function getUser(): ?User
-	{
-		return $this->user;
-	}
+                           	{
+                           		return $this->user;
+                           	}
 
 	public function setUser(?User $user): self
-	{
-		$this->user = $user;
+                           	{
+                           		$this->user = $user;
 
-		return $this;
-	}
+                           		return $this;
+                           	}
 
 	public function getAmount(): ?int
-	{
-		return $this->amount;
-	}
+                           	{
+                           		return $this->amount;
+                           	}
 
 	public function setAmount(int $amount): self
-	{
-		$this->amount = $amount;
+                           	{
+                           		$this->amount = $amount;
 
-		return $this;
-	}
+                           		return $this;
+                           	}
 
 	/**
 	 * @return Collection|OrderItem[]
 	 */
 	public function getOrderItems(): Collection
-	{
-		return $this->orderItems;
-	}
+                           	{
+                           		return $this->orderItems;
+                           	}
 
 	public function addOrderItem(OrderItem $orderItem): self
-	{
-		if ( !$this->orderItems->contains($orderItem) ) {
-			$this->orderItems[] = $orderItem;
-			$orderItem->setOrder($this);
-		}
+                           	{
+                           		if ( !$this->orderItems->contains($orderItem) ) {
+                           			$this->orderItems[] = $orderItem;
+                           			$orderItem->setOrder($this);
+                           		}
 
-		$this->updateAmount();
+                           		$this->updateAmount();
 
-		return $this;
-	}
+                           		return $this;
+                           	}
 
 	public function removeOrderItem(OrderItem $orderItem): self
-	{
-		if ( $this->orderItems->contains($orderItem) ) {
-			$this->orderItems->removeElement($orderItem);
-			// set the owning side to null (unless already changed)
-			if ( $orderItem->getOrder() === $this ) {
-				$orderItem->setOrder(null);
-			}
-		}
+                           	{
+                           		if ( $this->orderItems->contains($orderItem) ) {
+                           			$this->orderItems->removeElement($orderItem);
+                           			// set the owning side to null (unless already changed)
+                           			if ( $orderItem->getOrder() === $this ) {
+                           				$orderItem->setOrder(null);
+                           			}
+                           		}
 
-		$this->updateAmount();
+                           		$this->updateAmount();
 
-		return $this;
-	}
+                           		return $this;
+                           	}
 
 	public function updateAmount()
-	{
-		$amount = 0;
+                           	{
+                           		$amount = 0;
 
-		foreach ($this->orderItems as $item) {
-			$amount += $item->getAmount();
-		}
+                           		foreach ($this->orderItems as $item) {
+                           			$amount += $item->getAmount();
+                           		}
 
-		$this->setAmount($amount);
-	}
+                           		$this->setAmount($amount);
+                           	}
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
 }

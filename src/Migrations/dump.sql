@@ -86,7 +86,7 @@ CREATE TABLE `migration_versions` (
 
 LOCK TABLES `migration_versions` WRITE;
 /*!40000 ALTER TABLE `migration_versions` DISABLE KEYS */;
-INSERT INTO `migration_versions` VALUES ('20190423172309','2019-04-23 17:27:11'),('20190423174356','2019-04-23 17:45:29'),('20190430165922','2019-04-30 16:59:42'),('20190430171309','2019-04-30 17:13:15'),('20190430171909','2019-04-30 17:19:14'),('20190503163032','2019-05-03 16:30:38'),('20190507163617','2019-05-07 16:36:25'),('20190507174802','2019-05-07 17:48:10');
+INSERT INTO `migration_versions` VALUES ('20190423172309','2019-04-23 17:27:11'),('20190423174356','2019-04-23 17:45:29'),('20190430165922','2019-04-30 16:59:42'),('20190430171309','2019-04-30 17:13:15'),('20190430171909','2019-04-30 17:19:14'),('20190503163032','2019-05-03 16:30:38'),('20190507163617','2019-05-07 16:36:25'),('20190507174802','2019-05-07 17:48:10'),('20190513170037','2019-05-13 17:00:43'),('20190513174957','2019-05-13 17:50:01'),('20190528163012','2019-05-28 16:30:29');
 /*!40000 ALTER TABLE `migration_versions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -104,10 +104,13 @@ CREATE TABLE `order` (
   `status` int(11) NOT NULL,
   `is_paid` tinyint(1) NOT NULL,
   `amount` int(11) NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_F5299398A76ED395` (`user_id`),
   CONSTRAINT `FK_F5299398A76ED395` FOREIGN KEY (`user_id`) REFERENCES `site_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,6 +119,7 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
+INSERT INTO `order` VALUES (3,NULL,'2019-05-10 19:14:12',1,0,9129000,NULL,NULL,NULL),(4,NULL,'2019-05-13 20:59:31',1,0,80000,NULL,NULL,NULL),(5,NULL,'2019-05-17 20:23:00',1,0,5000,'sdfgdfg','sdgfsdgf@ggg','sdfgsdfg'),(6,NULL,'2019-05-21 19:26:35',1,0,20000,NULL,NULL,NULL),(7,NULL,'2019-05-28 19:27:19',1,0,1620000,NULL,NULL,NULL),(8,NULL,'2019-05-28 20:11:09',1,0,1620000,'675941571','gleb.sinkovskiy@gmail.com','Будьоного 9Г, 56'),(9,NULL,'2019-05-28 20:32:17',1,0,720000,'675941571','gleb.sinkovskiy@gmail.com','Будьоного 9Г, 56'),(10,NULL,'2019-05-28 20:41:06',1,0,2300000,'675941571','gleb@itworks-soft.com','Ivana Akinfieva st., 18/314a'),(11,NULL,'2019-05-28 20:42:02',1,0,20000,NULL,NULL,NULL),(12,NULL,'2019-05-28 20:46:00',1,0,3900000,'675941571','gleb@itworks-soft.com','Ivana Akinfieva st., 18/314a'),(13,NULL,'2019-05-31 20:37:54',1,0,1620000,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +142,7 @@ CREATE TABLE `order_item` (
   KEY `IDX_52EA1F098D9F6D38` (`order_id`),
   CONSTRAINT `FK_52EA1F094584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `FK_52EA1F098D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,6 +151,7 @@ CREATE TABLE `order_item` (
 
 LOCK TABLES `order_item` WRITE;
 /*!40000 ALTER TABLE `order_item` DISABLE KEYS */;
+INSERT INTO `order_item` VALUES (1,2,6,20000,120000,3),(2,3,3,1600000,4800000,3),(3,4,6,700000,4200000,3),(4,1,5,1800,9000,3),(5,2,4,20000,80000,4),(9,2,1,20000,20000,6),(10,2,1,20000,20000,7),(11,3,1,1600000,1600000,7),(12,3,1,1600000,1600000,8),(13,2,1,20000,20000,8),(14,2,1,20000,20000,9),(15,4,1,700000,700000,9),(16,3,1,1600000,1600000,10),(17,4,1,700000,700000,10),(18,2,1,20000,20000,11),(19,3,2,1600000,3200000,12),(20,4,1,700050,700000,12),(21,2,1,5000,5000,5),(22,2,1,20000,20000,13),(23,3,1,1600000,1600000,13);
 /*!40000 ALTER TABLE `order_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,6 +169,9 @@ CREATE TABLE `product` (
   `price` int(11) NOT NULL,
   `count` int(11) DEFAULT NULL,
   `is_top` tinyint(1) NOT NULL DEFAULT '0',
+  `image_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `image_original_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -174,7 +182,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Вода Моршинська 0.5','dfsh fdg sdfg sdfg sdfg sdg fdsg',1800,3,0),(2,'Мышь Vinga','asdf asdf asdf asrdgare sdfg sfdg',20000,NULL,1),(3,'Ноутбук ASUS',NULL,1600000,NULL,0),(4,'Смартфон',NULL,700000,NULL,0);
+INSERT INTO `product` VALUES (1,'Вода Моршинська 0.5','dfsh fdg sdfg sdfg sdfg sdg',1800,3,0,'5cd9aeac7ca16322802162.jpeg','2019-05-31 19:58:29','morsh.jpeg'),(2,'Мышь Vinga','asdf asdf asdf asrdgare sdfg sfdg',20000,NULL,1,'5cdee5a906a3e293858365.jpg','2019-05-31 20:37:54','full_msg-867-black_1.jpg'),(3,'Ноутбук ASUS',NULL,1600000,NULL,0,'5cdeea32c7d8f655638139.jpg','2019-05-31 20:37:56','vinga_ms-680_black.jpg'),(4,'Смартфон',NULL,700000,NULL,0,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,6 +234,8 @@ CREATE TABLE `site_user` (
   `confirmation_token` varchar(180) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password_requested_at` datetime DEFAULT NULL,
   `roles` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:array)',
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_B6096BB092FC23A8` (`username_canonical`),
   UNIQUE KEY `UNIQ_B6096BB0A0D96FBF` (`email_canonical`),
@@ -239,7 +249,7 @@ CREATE TABLE `site_user` (
 
 LOCK TABLES `site_user` WRITE;
 /*!40000 ALTER TABLE `site_user` DISABLE KEYS */;
-INSERT INTO `site_user` VALUES (1,'admin','admin','admin@supershop.com','admin@supershop.com',1,NULL,'$2y$13$RQgxIVppeYMnGoN4zKrRHedar3EBiDoiCVccA9Kc8R6npySa/kNFi','2019-04-30 20:50:51',NULL,NULL,'a:1:{i:0;s:10:\"ROLE_ADMIN\";}');
+INSERT INTO `site_user` VALUES (1,'admin','admin','admin@supershop.com','admin@supershop.com',1,NULL,'$2y$13$RQgxIVppeYMnGoN4zKrRHedar3EBiDoiCVccA9Kc8R6npySa/kNFi','2019-05-31 19:14:41',NULL,NULL,'a:1:{i:0;s:10:\"ROLE_ADMIN\";}',NULL,NULL);
 /*!40000 ALTER TABLE `site_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -252,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-07 21:00:23
+-- Dump completed on 2019-06-04 19:41:09

@@ -6,6 +6,8 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\Form\Type\CollectionType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ProductAdmin extends AbstractAdmin
@@ -47,7 +49,23 @@ class ProductAdmin extends AbstractAdmin
 			->add('image', VichImageType::class, [
 				'required' => false,
 			])
+            ->add(
+                'attributeValues',
+                CollectionType::class,
+                [
+                    'by_reference' => false
+                ],
+                [
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                ]
+            );
 		;
 	}
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('getAttributeCases', 'get-attribute-cases/{id}');
+    }
 
 }

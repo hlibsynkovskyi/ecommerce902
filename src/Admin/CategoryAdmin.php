@@ -14,6 +14,7 @@ class CategoryAdmin extends AbstractAdmin
 	{
 		$list
 			->addIdentifier('name')
+            ->add('attributes')
 		;
 	}
 
@@ -21,6 +22,7 @@ class CategoryAdmin extends AbstractAdmin
 	{
 		$filter
 			->add('name')
+            ->add('attributes')
 		;
 	}
 
@@ -28,6 +30,7 @@ class CategoryAdmin extends AbstractAdmin
 	{
 		$form
 			->add('name')
+            ->add('attributes')
 		;
 	}
 

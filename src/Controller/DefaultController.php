@@ -22,14 +22,4 @@ class DefaultController extends AbstractController
         ]);
     }
 
-	/**
-	 * @Route("/product/{id}", name="product")
-	 */
-    public function product(Product $product)
-	{
-		return $this->render('default/product.html.twig', [
-			'product' => $product,
-		]);
-	}
-
 }

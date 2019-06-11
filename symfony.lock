@@ -616,6 +616,9 @@
             "config/packages/vich_uploader.yaml"
         ]
     },
+    "wayforpay/php": {
+        "version": "dev-master"
+    },
     "webmozart/assert": {
         "version": "1.4.0"
     },
